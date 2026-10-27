@@ -3,200 +3,264 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>オタロード周辺 2000円以内ラーメン ランダムピッカー</title>
+<title>梅田駅周辺 1000円以内バーガーランダムピックアップ</title>
 <style>
-  :root {
-    --bg: #1a1a2e;
-    --card: #16213e;
-    --accent: #e94560;
-    --text: #eaeaea;
-    --muted: #a0a0b0;
-    --green: #4ecca3;
-  }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
-    font-family: "Hiragino Sans", "Yu Gothic", sans-serif;
-    background: linear-gradient(160deg, #1a1a2e 0%, #0f3460 100%);
-    color: var(--text); min-height: 100vh; padding: 20px; line-height: 1.6;
+    font-family: "Hiragino Sans", "Meiryo", sans-serif;
+    background: linear-gradient(135deg, #ff6b35, #f7931e, #ffcc00);
+    min-height: 100vh;
+    color: #333;
+    padding: 20px;
   }
-  .global-nav {
-    max-width: 720px; margin: 0 auto 20px; display: flex; gap: 8px; overflow-x: auto; padding-bottom: 5px;
+  .container {
+    max-width: 800px;
+    margin: 0 auto;
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+    overflow: hidden;
   }
-  .global-nav a {
-    text-decoration: none; color: #ccc; background: rgba(255,255,255,0.1); padding: 8px 14px;
-    border-radius: 20px; font-size: 0.85rem; font-weight: bold; white-space: nowrap; border: 1px solid rgba(255,255,255,0.15);
+  header {
+    background: #d62300;
+    color: white;
+    padding: 25px 20px;
+    text-align: center;
   }
-  .global-nav a.active { background: var(--accent); color: #fff; border-color: var(--accent); }
-  .container { max-width: 720px; margin: 0 auto; }
-  h1 { text-align: center; font-size: 1.6rem; margin-bottom: 8px; color: #fff; }
-  .subtitle { text-align: center; color: var(--muted); font-size: 0.9rem; margin-bottom: 24px; }
-  .btn { display: block; width: 100%; padding: 16px; font-size: 1.15rem; font-weight: bold; border: none; border-radius: 12px; cursor: pointer; }
-  .btn-main { background: var(--accent); color: #fff; margin-bottom: 16px; }
-  .btn-sub { background: transparent; border: 1px solid var(--muted); color: var(--text); margin-bottom: 12px; font-size: 0.95rem; }
-  .result { background: var(--card); border-radius: 16px; padding: 24px; margin: 20px 0; display: none; box-shadow: 0 8px 32px rgba(0,0,0,0.3); }
-  .result.show { display: block; animation: fadeIn 0.4s; }
-  @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-  .shop-name { font-size: 1.4rem; font-weight: bold; color: var(--green); margin-bottom: 4px; }
-  .menu-name { font-size: 1.25rem; margin: 12px 0 4px; }
-  .price { font-size: 1.8rem; font-weight: bold; color: var(--accent); }
-  .min-price { color: var(--muted); font-size: 0.9rem; margin-top: 8px; }
-  .panel { background: var(--card); border-radius: 12px; padding: 16px; margin-top: 16px; display: none; }
-  .panel.show { display: block; }
-  .panel h3 { font-size: 1rem; margin-bottom: 12px; color: var(--green); }
-  .menu-list { list-style: none; }
-  .menu-list li { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.08); font-size: 0.95rem; }
-  .note { font-size: 0.75rem; color: var(--muted); margin-top: 20px; text-align: center; }
-  .prompt-box { margin-top: 40px; padding: 16px; background: rgba(0,0,0,0.35); border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); }
-  .prompt-box h4 { font-size: 0.85rem; color: var(--muted); margin-bottom: 8px; }
-  .prompt-box pre { white-space: pre-wrap; word-break: break-all; font-size: 0.75rem; color: #888; font-family: monospace; }
+  header h1 {
+    font-size: 1.6rem;
+    margin-bottom: 8px;
+  }
+  header p {
+    font-size: 0.95rem;
+    opacity: 0.9;
+  }
+  .main {
+    padding: 30px 25px;
+  }
+  .result-box {
+    background: #fff8f0;
+    border: 3px solid #ff6b35;
+    border-radius: 16px;
+    padding: 25px;
+    text-align: center;
+    margin-bottom: 25px;
+    min-height: 180px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .result-box h2 {
+    color: #d62300;
+    font-size: 1.4rem;
+    margin-bottom: 12px;
+  }
+  .result-box .place {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #222;
+    margin-bottom: 8px;
+  }
+  .result-box .menu {
+    font-size: 1.25rem;
+    color: #444;
+    margin-bottom: 6px;
+  }
+  .result-box .price {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #d62300;
+  }
+  .btn {
+    display: block;
+    width: 100%;
+    padding: 16px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: white;
+    background: linear-gradient(90deg, #d62300, #ff6b35);
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s;
+    margin-bottom: 30px;
+  }
+  .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(214,35,0,0.4);
+  }
+  .btn:active {
+    transform: translateY(0);
+  }
+  .info-section {
+    margin-bottom: 25px;
+  }
+  .info-section h3 {
+    font-size: 1.15rem;
+    color: #d62300;
+    border-bottom: 2px solid #ffcc00;
+    padding-bottom: 6px;
+    margin-bottom: 12px;
+  }
+  .min-price {
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: #222;
+    background: #fff3cd;
+    padding: 12px 16px;
+    border-radius: 10px;
+    text-align: center;
+  }
+  .menu-list {
+    max-height: 320px;
+    overflow-y: auto;
+    border: 1px solid #eee;
+    border-radius: 10px;
+    padding: 10px;
+  }
+  .menu-list table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+  }
+  .menu-list th, .menu-list td {
+    padding: 8px 6px;
+    text-align: left;
+    border-bottom: 1px solid #f0f0f0;
+  }
+  .menu-list th {
+    background: #fff8f0;
+    position: sticky;
+    top: 0;
+  }
+  .menu-list tr:hover {
+    background: #fff8f0;
+  }
+  footer {
+    background: #f5f5f5;
+    padding: 20px;
+    font-size: 0.75rem;
+    color: #666;
+    line-height: 1.5;
+    border-top: 1px solid #ddd;
+  }
+  footer p {
+    word-break: break-all;
+  }
 </style>
 </head>
 <body>
-
-<nav class="global-nav">
-  <a href="index.html">🏠 トップ</a>
-  <a href="fastfood-breakfast.html">🌅 梅田朝食</a>
-  <a href="fastfood-1000.html">🍔 梅田1000円</a>
-  <a href="jankara.html">🎤 ジャンカラ</a>
-  <a href="ramen-otaroad.html" class="active">🍜 オタロードラーメン</a>
-</nav>
-
 <div class="container">
-  <h1>🍜 オタロード周辺<br>2000円以内ラーメン<br>ランダムピッカー</h1>
-  <p class="subtitle">大阪・日本橋オタロード周辺のラーメン店からランダムに1杯提案します</p>
+  <header>
+    <h1>🍔 梅田駅周辺<br>1000円以内バーガー抽選</h1>
+    <p>画像のワッパー系ミールに近いメニューをランダムピックアップ</p>
+  </header>
 
-  <button class="btn btn-main" onclick="pick()">ランダムに選ぶ！</button>
-  <button class="btn btn-sub" onclick="toggleList()">選ばれるメニュー一覧を表示 / 隠す</button>
-  <button class="btn btn-sub" onclick="toggleMin()">各店の最低価格を表示 / 隠す</button>
+  <div class="main">
+    <div class="result-box" id="result">
+      <p style="color:#888;">下のボタンを押してランダム抽選！</p>
+    </div>
 
-  <div class="result" id="result">
-    <div class="shop-name" id="shopName"></div>
-    <div class="menu-name" id="menuName"></div>
-    <div class="price" id="price"></div>
-    <div class="min-price" id="minInfo"></div>
+    <button class="btn" onclick="pickRandom()">🎲 ランダムにピックアップする</button>
+
+    <div class="info-section">
+      <h3>💰 最低価格（候補メニュー中）</h3>
+      <div class="min-price" id="minPrice">計算中...</div>
+    </div>
+
+    <div class="info-section">
+      <h3>📋 選ばれるメニュー一覧（1000円以内）</h3>
+      <div class="menu-list">
+        <table>
+          <thead>
+            <tr>
+              <th>店舗</th>
+              <th>メニュー</th>
+              <th>価格</th>
+            </tr>
+          </thead>
+          <tbody id="menuTableBody">
+          </tbody>
+        </table>
+      </div>
+    </div>
   </div>
 
-  <div class="panel" id="listPanel">
-    <h3>📋 選ばれるメニュー一覧（すべて2000円以内）</h3>
-    <ul class="menu-list" id="fullList"></ul>
-  </div>
-
-  <div class="panel" id="minPanel">
-    <h3>💰 各店の最低価格</h3>
-    <ul class="menu-list" id="minList"></ul>
-  </div>
-
-  <p class="note">
-    ※価格は公開情報に基づく参考値です。実際のメニュー・価格・営業状況は店舗でご確認ください。<br>
-    データは2024〜2026年頃の情報を基にしています。
-  </p>
-
-  <div class="prompt-box">
-    <h4>このサイトを生成したプロンプト</h4>
-    <pre>オタロード周辺でラーメンを2000円以内で食える場所をランダムにピックアップしてメニューもランダムに選ぶHTMLサイトを作ってください 最低値と選ばれるメニュー一覧も確認できるようにして このプロンプト自体の文字をサイトの下部に貼って</pre>
-  </div>
+  <footer>
+    <p><strong>このプロンプト自体の文字：</strong></p>
+    <p>梅田駅周辺でこの料理を1000円以内で食える場所をランダムにピックアップしてメニューもランダムに選ぶHTMLサイトを作ってください 最低値と選ばれるメニュー一覧も確認できるようにして このプロンプト自体の文字をサイトの下部に貼って</p>
+  </footer>
 </div>
 
 <script>
-const shops = [
-  {
-    name: "横浜家系ラーメン 大阪なんば 魂心家",
-    menus: [
-      { name: "醤油ラーメン", price: 650 }, { name: "醤油味玉ラーメン", price: 750 },
-      { name: "醤油631ラーメン", price: 900 }, { name: "塩ラーメン", price: 650 },
-      { name: "味噌ラーメン", price: 700 }
-    ]
-  },
-  {
-    name: "麺屋 丈六 なんば店",
-    menus: [
-      { name: "中華そば（小）", price: 700 }, { name: "中華そば", price: 800 },
-      { name: "中華そば（大）", price: 900 }, { name: "塩ラーメン", price: 850 },
-      { name: "煮干し醤油", price: 850 }
-    ]
-  },
-  {
-    name: "らーめん 天道",
-    menus: [
-      { name: "鶏ぱいたんらーめん", price: 700 }, { name: "魚介鶏ぱいたんらーめん", price: 750 },
-      { name: "からし鶏ぱいたんらーめん", price: 750 }, { name: "鶏ぱいたん味玉らーめん", price: 800 },
-      { name: "魚介鶏ぱいたんつけ麺", price: 880 }
-    ]
-  },
-  {
-    name: "くそオヤジ最後のひとふり なんば店",
-    menus: [
-      { name: "しじみらーめん", price: 791 }, { name: "あさりらーめん", price: 891 },
-      { name: "はまぐりらーめん", price: 991 }, { name: "あさりラーメン（税込参考）", price: 980 },
-      { name: "はまぐりらーめん（税込参考）", price: 1090 }
-    ]
-  },
-  {
-    name: "麺屋 青空 日本橋店",
-    menus: [
-      { name: "青空のあっさり塩ラーメン", price: 800 }, { name: "博多屋台豚骨ラーメン", price: 850 },
-      { name: "あおぞらのあっさり醤油ラーメン", price: 850 }, { name: "青空のあっさりエビラーメン", price: 800 },
-      { name: "新奈良豚骨ラーメン", price: 900 }
-    ]
-  },
-  {
-    name: "らーめん一八 日本橋店",
-    menus: [
-      { name: "一八特製らーめん", price: 850 }, { name: "濃厚つけ麺", price: 950 },
-      { name: "鶏白湯ラーメン", price: 800 }, { name: "特製つけ麺", price: 1050 }
-    ]
-  }
+// 梅田駅周辺で1000円以内で食べられるハンバーガー系メニュー候補
+// （価格は2026年10月時点の参考値。店舗・時期により変動あり）
+const candidates = [
+  // バーガーキング
+  { place: "バーガーキング リンクス梅田店", menu: "ワッパーJr.セット", price: 600 },
+  { place: "バーガーキング リンクス梅田店", menu: "スモーキーBBQワッパーJr.セット", price: 650 },
+  { place: "バーガーキング リンクス梅田店", menu: "ハッシュ＆BBQバーガーセット", price: 600 },
+  { place: "バーガーキング リンクス梅田店", menu: "フィッシュバーガーセット", price: 600 },
+  { place: "バーガーキング リンクス梅田店", menu: "BBQレタスバーガーセット", price: 550 },
+  { place: "バーガーキング リンクス梅田店", menu: "スモーキーテリヤキバーガーセット", price: 550 },
+  { place: "バーガーキング リンクス梅田店", menu: "タルタルチキンバーガーセット", price: 550 },
+  { place: "バーガーキング リンクス梅田店", menu: "マッシュルームワッパーJr.セット（割引後）", price: 790 },
+  { place: "バーガーキング リンクス梅田店", menu: "チーズバーガーコンビ", price: 390 },
+  { place: "バーガーキング リンクス梅田店", menu: "ワッパー単品", price: 690 },
+  { place: "バーガーキング リンクス梅田店", menu: "ワッパーチーズ単品", price: 790 },
+  { place: "バーガーキング 梅田茶屋町店", menu: "ワッパーJr.セット", price: 600 },
+  { place: "バーガーキング 梅田茶屋町店", menu: "BBQレタスバーガーセット", price: 550 },
+  { place: "バーガーキング 梅田茶屋町店", menu: "マッシュルームワッパーJr.セット（割引後）", price: 790 },
+  { place: "バーガーキング 梅田茶屋町店", menu: "ワッパーチーズセット（クーポン利用例）", price: 790 },
+
+  // マクドナルド
+  { place: "マクドナルド 新梅田店など", menu: "ハンバーガーセット（セット500）", price: 500 },
+  { place: "マクドナルド 新梅田店など", menu: "マックチキンセット（セット500）", price: 500 },
+  { place: "マクドナルド 新梅田店など", menu: "マックポークセット（セット500）", price: 500 },
+  { place: "マクドナルド 新梅田店など", menu: "てりやきマックバーガーセット", price: 670 },
+  { place: "マクドナルド 新梅田店など", menu: "ダブルチーズバーガーセット", price: 740 },
+  { place: "マクドナルド 新梅田店など", menu: "ビッグマックセット", price: 770 },
+  { place: "マクドナルド 新梅田店など", menu: "フィレオフィッシュセット", price: 690 },
+  { place: "マクドナルド 新梅田店など", menu: "エグチセット", price: 610 },
+
+  // モスバーガー
+  { place: "モスバーガー 大阪駅前第2ビル店など", menu: "モスバーガー昼割セット", price: 900 },
+  { place: "モスバーガー 大阪駅前第2ビル店など", menu: "テリヤキバーガー昼割セット", price: 890 },
+  { place: "モスバーガー 大阪駅前第2ビル店など", menu: "チキンバーガー昼割セット", price: 820 },
+  { place: "モスバーガー 大阪駅前第2ビル店など", menu: "モスバーガー単品", price: 500 },
+  { place: "モスバーガー 大阪駅前第2ビル店など", menu: "モスチーズバーガー単品", price: 540 },
+  { place: "モスバーガー 大阪駅前第2ビル店など", menu: "テリヤキチキンバーガー単品", price: 510 },
 ];
 
-function getAllMenus() {
-  const list = [];
-  shops.forEach(shop => {
-    shop.menus.forEach(m => {
-      if (m.price <= 2000) {
-        list.push({ shop: shop.name, ...m });
-      }
+function init() {
+  // 最低価格を計算
+  const min = Math.min(...candidates.map(c => c.price));
+  document.getElementById("minPrice").textContent = min + "円（" + 
+    candidates.filter(c => c.price === min).map(c => c.menu).join(" / ") + "）";
+
+  // 一覧テーブル生成
+  const tbody = document.getElementById("menuTableBody");
+  candidates
+    .sort((a, b) => a.price - b.price)
+    .forEach(c => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `<td>${c.place}</td><td>${c.menu}</td><td>${c.price}円</td>`;
+      tbody.appendChild(tr);
     });
-  });
-  return list;
 }
 
-function pick() {
-  const all = getAllMenus();
-  const item = all[Math.floor(Math.random() * all.length)];
-  const shop = shops.find(s => s.name === item.shop);
-  const minPrice = Math.min(...shop.menus.map(m => m.price));
-
-  document.getElementById("shopName").textContent = item.shop;
-  document.getElementById("menuName").textContent = item.name;
-  document.getElementById("price").textContent = item.price.toLocaleString() + "円";
-  document.getElementById("minInfo").textContent = `この店の最低価格：${minPrice.toLocaleString()}円`;
-  document.getElementById("result").classList.add("show");
+function pickRandom() {
+  const item = candidates[Math.floor(Math.random() * candidates.length)];
+  const result = document.getElementById("result");
+  result.innerHTML = `
+    <h2>🎉 本日のランダムピック！</h2>
+    <div class="place">${item.place}</div>
+    <div class="menu">${item.menu}</div>
+    <div class="price">${item.price}円</div>
+  `;
 }
 
-function toggleList() {
-  const panel = document.getElementById("listPanel");
-  if (!panel.classList.contains("show")) {
-    const all = getAllMenus();
-    const ul = document.getElementById("fullList");
-    ul.innerHTML = all
-      .sort((a, b) => a.price - b.price)
-      .map(m => `<li><span>${m.shop} / ${m.name}</span><span>${m.price.toLocaleString()}円</span></li>`)
-      .join("");
-  }
-  panel.classList.toggle("show");
-}
-
-function toggleMin() {
-  const panel = document.getElementById("minPanel");
-  if (!panel.classList.contains("show")) {
-    const ul = document.getElementById("minList");
-    ul.innerHTML = shops.map(shop => {
-      const min = Math.min(...shop.menus.map(m => m.price));
-      return `<li><span>${shop.name}</span><span>${min.toLocaleString()}円</span></li>`;
-    }).join("");
-  }
-  panel.classList.toggle("show");
-}
+init();
 </script>
 </body>
 </html>
