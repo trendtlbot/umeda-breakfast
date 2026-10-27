@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ジャンカラ 500円以内フードランダムセレクター【10月版】</title>
+<style>
+  :root {
+    --main: #e60012;
+    --bg: #fff8f0;
+    --card: #ffffff;
+    --text: #222;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
+    background: linear-gradient(180deg, #ffe8e0 0%, var(--bg) 120px);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 20px 16px 40px;
+    line-height: 1.5;
+  }
+  .container { max-width: 640px; margin: 0 auto; }
+  header {
+    text-align: center;
+    margin-bottom: 24px;
+  }
+  h1 {
+    font-size: 1.5rem;
+    color: var(--main);
+    margin-bottom: 4px;
+  }
+  .badge {
+    display: inline-block;
+    background: var(--main);
+    color: #fff;
+    font-size: 0.85rem;
+    font-weight: bold;
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-bottom: 8px;
+  }
+  .sub {
+    font-size: 0.9rem;
+    color: #666;
+  }
+  .card {
+    background: var(--card);
+    border-radius: 16px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+  .result {
+    text-align: center;
+    min-height: 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  .result-name {
+    font-size: 1.4rem;
+    font-weight: bold;
+    color: var(--main);
+    margin: 8px 0;
+  }
+  .result-price {
+    font-size: 1.2rem;
+    font-weight: bold;
+  }
+  .result-tag {
+    font-size: 0.75rem;
+    background: #ffecb3;
+    color: #b36b00;
+    padding: 2px 8px;
+    border-radius: 8px;
+    margin-top: 6px;
+  }
+  button {
+    display: block;
+    width: 100%;
+    max-width: 280px;
+    margin: 16px auto 0;
+    padding: 14px 20px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #fff;
+    background: var(--main);
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    box-shadow: 0 4px 0 #b3000e;
+    transition: transform 0.1s, box-shadow 0.1s;
+  }
+  button:active {
+    transform: translateY(3px);
+    box-shadow: 0 1px 0 #b3000e;
+  }
+  .info {
+    display: flex;
+    justify-content: space-around;
+    text-align: center;
+    margin-bottom: 12px;
+    font-size: 0.95rem;
+  }
+  .info strong { color: var(--main); font-size: 1.2rem; }
+  h2 {
+    font-size: 1.1rem;
+    margin-bottom: 12px;
+    border-bottom: 2px solid var(--main);
+    padding-bottom: 4px;
+  }
+  .menu-list {
+    max-height: 360px;
+    overflow-y: auto;
+    font-size: 0.9rem;
+  }
+  .menu-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 4px;
+    border-bottom: 1px solid #eee;
+  }
+  .menu-item.limited { background: #fff8e1; }
+  .tag-limited {
+    font-size: 0.7rem;
+    background: #ff9800;
+    color: #fff;
+    padding: 1px 6px;
+    border-radius: 6px;
+    margin-left: 6px;
+  }
+  .note {
+    font-size: 0.8rem;
+    color: #888;
+    margin-top: 12px;
+  }
+  footer {
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px dashed #ccc;
+    font-size: 0.75rem;
+    color: #666;
+    white-space: pre-wrap;
+    word-break: break-all;
+  }
+  footer h3 {
+    font-size: 0.85rem;
+    margin-bottom: 8px;
+    color: #444;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <span class="badge">10月版</span>
+    <h1>ジャンカラ 500円以内<br>フードランダムセレクター</h1>
+    <p class="sub">500円以下のメニューからランダムで1品選びます</p>
+  </header>
+
+  <div class="card">
+    <div class="info">
+      <div>対象メニュー数<br><strong id="count">-</strong></div>
+      <div>最低価格<br><strong id="minPrice">-</strong>円</div>
+    </div>
+    <div class="result" id="result">
+      <p>下のボタンを押してね！</p>
+    </div>
+    <button type="button" id="pickBtn">ランダムに選ぶ！</button>
+  </div>
+
+  <div class="card">
+    <h2>選ばれるメニュー一覧（500円以内）</h2>
+    <div class="menu-list" id="menuList"></div>
+    <p class="note">※価格は税込の参考値です。店舗・時期により異なる場合があります。<br>
+    ※期間限定メニューは店舗によって提供状況が異なります。</p>
+  </div>
+
+  <footer>
+    <h3>このサイトの作成に使ったプロンプト</h3>
+ジャンカラのフードメニューで500円以内で食えるメニューをランダムに選ぶHTMLサイトを作ってください 最低値と選ばれるメニュー一覧も確認できるようにして
+あと10月版という文字も追加してほしいのと
+期間限定メニューも入れるようにして欲しいのと
+このプロンプト自体の文字をサイトの下部に貼って
+  </footer>
+</div>
+
+<script>
+const menus = [
+  // 定番
+  { name: "ジャンチキ", price: 330 },
+  { name: "殻付き落花生", price: 330 },
+  { name: "柿ピー", price: 330 },
+  { name: "山盛りえびせん", price: 330 },
+  { name: "ポッキー＆ホイップ", price: 340 },
+  { name: "なにわのタコ焼き（6個）", price: 390 },
+  { name: "旨味チキン", price: 390 },
+  { name: "えだ豆", price: 390 },
+  { name: "ごま塩きゅうり（塩だれ付）", price: 390 },
+  { name: "ごま塩トマト（塩だれ付）", price: 390 },
+  { name: "トマト＆キムチ", price: 390 },
+  { name: "バジルトマト", price: 390 },
+  { name: "関西だしうどん", price: 390 },
+  { name: "ポテチ うす塩味", price: 390 },
+  { name: "フライドポテト", price: 420 },
+  { name: "スマイルポテト", price: 420 },
+  { name: "ナゲット（6個）", price: 420 },
+  { name: "チーズステック", price: 420 },
+  { name: "やさしい玉子雑炊", price: 420 },
+  { name: "スパイシーポテト", price: 430 },
+  { name: "チョコアイス", price: 430 },
+  { name: "ストロベリーアイス", price: 430 },
+  { name: "レモンチーズケーキ", price: 430 },
+  { name: "ジューシー鶏カラ（5個）", price: 440 },
+  { name: "温玉うどん", price: 440 },
+  { name: "もちもちドーナツ", price: 450 },
+  { name: "ポテチ のり塩味", price: 450 },
+  { name: "ポテチ うす塩＆のり塩", price: 450 },
+  { name: "アイスプリン", price: 460 },
+  { name: "ナゲット（3個）", price: 470 },
+  { name: "ジャンカラ・ピザポテト", price: 490 },
+  { name: "ハマる・のり塩ポテト", price: 490 },
+  { name: "ヤンニョムチキン", price: 490 },
+  { name: "鶏軟骨唐揚げ", price: 490 },
+  { name: "タコの唐揚げ", price: 490 },
+  { name: "コロコロいかフライ", price: 490 },
+  { name: "さきいかの天ぷら", price: 490 },
+  { name: "チャーハン", price: 490 },
+  { name: "キムチ雑炊", price: 490 },
+  { name: "ジャンカラしょう油ラーメン", price: 490 },
+  { name: "ピリ辛ジャージャーメン", price: 490 },
+  { name: "ごま香る担々メン", price: 490 },
+  { name: "濃厚ショコラテリーヌ", price: 490 },
+
+  // 期間限定例（10月頃の季節・キャンペーン想定／価格は参考）
+  { name: "クラシックホットドッグ", price: 490, limited: true },
+  { name: "てりマヨチキンドッグ", price: 490, limited: true },
+  { name: "スパイシーチーズドッグ", price: 490, limited: true },
+  { name: "おやつDeプチアメリカンドッグ", price: 390, limited: true },
+  { name: "昔なつかしのプリン", price: 450, limited: true },
+  { name: "抹茶あんみつ", price: 490, limited: true }
+];
+
+// 初期化
+const countEl = document.getElementById("count");
+const minPriceEl = document.getElementById("minPrice");
+const menuListEl = document.getElementById("menuList");
+const resultEl = document.getElementById("result");
+const pickBtn = document.getElementById("pickBtn");
+
+const minPrice = Math.min(...menus.map(m => m.price));
+countEl.textContent = menus.length;
+minPriceEl.textContent = minPrice;
+
+// 一覧描画
+menus
+  .slice()
+  .sort((a, b) => a.price - b.price || a.name.localeCompare(b.name, "ja"))
+  .forEach(m => {
+    const div = document.createElement("div");
+    div.className = "menu-item" + (m.limited ? " limited" : "");
+    div.innerHTML = `
+      <span>${m.name}${m.limited ? '<span class="tag-limited">期間限定</span>' : ""}</span>
+      <span>${m.price}円</span>
+    `;
+    menuListEl.appendChild(div);
+  });
+
+// ランダム選択
+pickBtn.addEventListener("click", () => {
+  const item = menus[Math.floor(Math.random() * menus.length)];
+  resultEl.innerHTML = `
+    <p>今日の一品は…</p>
+    <div class="result-name">${item.name}</div>
+    <div class="result-price">${item.price}円</div>
+    ${item.limited ? '<div class="result-tag">期間限定メニュー</div>' : ""}
+  `;
+});
+</script>
+</body>
+</html>
